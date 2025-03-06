@@ -30,7 +30,7 @@ export default function Dashboard() {
 
   const fetchEmployees = async (authToken: string) => {
     try {
-      const response = await fetch("http://localhost:3000/api/employees", {
+      const response = await fetch("/api/employees", {
         headers: { Authorization: `Bearer ${authToken}` },
       });
       if (!response.ok) throw new Error("Failed to fetch employees");
@@ -46,17 +46,14 @@ export default function Dashboard() {
     if (!token) return;
     try {
       setIsLoading(true);
-      const response = await fetch(
-        "http://localhost:3000/api/employees/create",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(newEmployee),
-        }
-      );
+      const response = await fetch("/api/employees/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(newEmployee),
+      });
       if (response.ok) {
         await fetchEmployees(token);
         setIsModalOpen(false);

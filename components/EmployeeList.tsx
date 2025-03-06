@@ -40,7 +40,7 @@ export function EmployeeList({
   const fetchEmployees = async () => {
     try {
       setIsLoading(true);
-      const response = await fetch("http://localhost:3000/api/employees", {
+      const response = await fetch("/api/employees", {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (!response.ok) throw new Error("Failed to fetch employees");
@@ -59,13 +59,10 @@ export function EmployeeList({
 
   const handleDeleteEmployee = async (id: string) => {
     try {
-      const response = await fetch(
-        `http://localhost:3000/api/employees/${id}`,
-        {
-          method: "DELETE",
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const response = await fetch(`/api/employees/${id}`, {
+        method: "DELETE",
+        headers: { Authorization: `Bearer ${token}` },
+      });
       if (response.ok) await fetchEmployees();
     } catch (error) {
       console.error("Error deleting employee:", error);
@@ -76,7 +73,7 @@ export function EmployeeList({
     if (selectedRole === "Change role") return;
     try {
       const updatePromises = selectedEmployees.map((id) =>
-        fetch(`http://localhost:3000/api/employees/${id}`, {
+        fetch(`/api/employees/${id}`, {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
