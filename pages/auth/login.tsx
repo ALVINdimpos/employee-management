@@ -9,7 +9,7 @@ const LoginPage: React.FC = () => {
   });
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -133,19 +133,19 @@ const LoginPage: React.FC = () => {
               </label>
               <div className="relative">
                 <input
-                  type="password"
+                  type={isPasswordVisible ? "text" : "password"}
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
-                  className="px-3 py-2 pr-10 pl-10 w-full rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
+                  className="px-3 py-2 pr-10 w-full rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-500"
                   placeholder="********"
                   required
                 />
-                <span className="absolute left-3 top-1/2 text-gray-400 transform -translate-y-1/2">
-                  🔒
-                </span>
-                <span className="absolute right-3 top-1/2 text-gray-400 transform -translate-y-1/2">
-                  👁️
+                <span               
+                  className="absolute right-3 top-1/2 text-gray-400 transform -translate-y-1/2 cursor-pointer"
+                  onClick={() => setIsPasswordVisible(!isPasswordVisible)}
+                >
+                  {isPasswordVisible ? "👁️" : "🔒"}
                 </span>
               </div>
             </div>
