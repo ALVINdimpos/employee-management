@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Link from "next/link";
+import router from "next/router";
 
 const SignupPage: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -11,9 +12,8 @@ const SignupPage: React.FC = () => {
   });
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  // is password visible
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -39,8 +39,7 @@ const SignupPage: React.FC = () => {
         throw new Error(data.message || "Registration failed");
       }
 
-      console.log("Registration successful:", data);
-      // Optionally redirect or clear form here
+      setSuccessMessage("Registration successful redirecting...");
       setFormData({
         firstName: "",
         lastName: "",
@@ -48,6 +47,9 @@ const SignupPage: React.FC = () => {
         password: "",
         role: "user",
       });
+      setTimeout(() => {
+        router.push("/auth/login");
+      }, 3000);
     } catch (err: unknown) {
       if (err instanceof Error) {
         setError(err.message || "Something went wrong");
@@ -107,6 +109,28 @@ const SignupPage: React.FC = () => {
                   />
                 </svg>
                 <p className="text-sm font-medium text-red-700">{error}</p>
+              </div>
+            </div>
+          )}
+
+          {successMessage && (
+            <div className="p-3 mb-4 bg-green-50 rounded-md border border-green-200">
+              <div className="flex items-center">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="mr-2 w-5 h-5 text-green-500"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                <p className="text-sm font-medium text-green-700">
+                  {successMessage}
+                </p>
               </div>
             </div>
           )}

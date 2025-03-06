@@ -9,6 +9,7 @@ const LoginPage: React.FC = () => {
   });
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -34,10 +35,9 @@ const LoginPage: React.FC = () => {
       if (!response.ok) {
         throw new Error(data.message || "Login failed");
       }
-
-      console.log("Login successful:", data);
       // - Store the token in localStorage/sessionStorage
       localStorage.setItem("token", data.data.token);
+      setSuccessMessage("Login successful redirecting...");
       // - Redirect to a dashboard
       router.push("/dashboard");
 
@@ -108,6 +108,28 @@ const LoginPage: React.FC = () => {
             </div>
           )}
 
+          {successMessage && (
+            <div className="p-3 mb-4 bg-green-50 rounded-md border border-green-200">
+              <div className="flex items-center">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="mr-2 w-5 h-5 text-green-500"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                <p className="text-sm font-medium text-green-700">
+                  {successMessage}
+                </p>
+              </div>
+            </div>
+          )}
+
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label className="block mb-1 text-sm text-gray-600">Email</label>
@@ -141,7 +163,7 @@ const LoginPage: React.FC = () => {
                   placeholder="********"
                   required
                 />
-                <span               
+                <span
                   className="absolute right-3 top-1/2 text-gray-400 transform -translate-y-1/2 cursor-pointer"
                   onClick={() => setIsPasswordVisible(!isPasswordVisible)}
                 >
